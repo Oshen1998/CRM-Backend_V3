@@ -1,24 +1,36 @@
+'use strict';
+
 const jwt = require('jsonwebtoken');
-
-('use strict');
-
 const userModel = require('../../models/user.model');
 const { verifyPassword, genToken } = require('../../utils/auth.utils');
 
 const loginController = async (req, res) => {
-	let { email, password } = req.body;
-	let user = await userModel.findOne({ email });
-	if (!user || !verifyPassword(password, user.password))
-		return res.status(404).send({
-			code: res.statusCode,
-			error: { message: 'email or password is invalid' },
-		});
-	let token = genToken({ email: user.email, password: user.password });
-	res.status(200).json({
-		code: res.statusCode,
-		message: 'successfully logged in 😁',
-		token,
-	});
+  const { email, password } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user || !verifyPassword(password, user.password)) {
+      return res.status(404).send({
+        code: res.statusCode,
+        error: { message: 'Email or password is invalid' },
+      });
+    }
+
+    const token = genToken({ email: user.email, password: user.password });
+
+    return res.status(200).json({
+      code: res.statusCode,
+      message: 'Successfully logged in 😁',
+      token,
+    });
+  } catch (error) {
+    console.error('Error during login:', error);
+    return res.status(500).send({
+      code: 500,
+      error: { message: 'An internal server error occurred' },
+    });
+  }
 };
 
 module.exports = loginController;
