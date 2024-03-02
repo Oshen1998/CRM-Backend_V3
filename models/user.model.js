@@ -13,6 +13,7 @@ const userSchema = new Schema(
 		mobile: { type: String },
 		bio: { type: String },
 		timeZone: { type: String },
+		
 	},
 	{ timestamps: true },
 );
