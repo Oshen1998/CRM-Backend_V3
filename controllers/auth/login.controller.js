@@ -12,8 +12,7 @@ const loginController = async (req, res) => {
 
     if (!user || !verifyPassword(password, user.password)) {
       return res.status(404).send({
-        code: res.statusCode,
-        error: { message: 'Email or password is invalid' },
+         message: 'Email or password is invalid' ,
       });
     }
 
