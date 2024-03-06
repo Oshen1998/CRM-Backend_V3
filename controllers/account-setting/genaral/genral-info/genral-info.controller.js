@@ -1,4 +1,4 @@
-const User = require('../../../../models/account-setting/general/general-info/general-info.model');
+const User = require('../../../../models/account-seeting/genaral/genaral-info/genaral-info.model');
 
 // Controller to create a new user
 exports.createUser = async (req, res) => {
@@ -45,6 +45,10 @@ exports.getUserById = async (req, res) => {
 exports.updateUser = async (req, res) => {
 	const userId = req.params.id;
 	try {
+		// Ensure user is authenticated
+		if (!req.authenticated) {
+			return res.status(403).json({ message: 'Unauthorized' });
+		}
 		const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true });
 		if (!updatedUser) {
 			return res.status(404).json({ message: 'User not found' });
@@ -63,6 +67,10 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
 	const userId = req.params.id;
 	try {
+		// Ensure user is authenticated
+		if (!req.authenticated) {
+			return res.status(403).json({ message: 'Unauthorized' });
+		}
 		const deletedUser = await User.findByIdAndDelete(userId);
 		if (!deletedUser) {
 			return res.status(404).json({ message: 'User not found' });
