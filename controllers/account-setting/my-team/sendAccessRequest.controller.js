@@ -3,6 +3,7 @@
 const accessRequestModel = require('../../../models/accessRequest.model');
 const userModel = require('../../../models/user.model');
 const sendMail = require('../../../utils/sendEmails.utils');
+const crypto = require('crypto');
 
 const sendAccessRequestController = async (req, res, next) => {
 	try {
