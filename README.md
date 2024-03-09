@@ -3,9 +3,9 @@ In this example, the mongoose-paginate-v2 library is used to handle pagination. 
 **
 Now, you can call your endpoint like this to get different pages:
 
-To get the first page: /getEvent?page=1
-To get the second page: /getEvent?page=2
-To change the number of items per page (e.g., 20 items per page): /getEvent?page=1&limit=20
+	To get the first page: /getEvent?page=1
+	To get the second page: /getEvent?page=2
+	To change the number of items per page (e.g., 20 items per page): /getEvent?page=1&limit=20
 
 ///////////////////////////////////////////code starts from here////////////////////////////////////////////////////////
 
