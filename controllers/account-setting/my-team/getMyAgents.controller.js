@@ -1,6 +1,6 @@
 'use strict';
 
-const accessRequestModel = require('../../models/accessRequest.model');
+const accessRequestModel = require('../../../models/accessRequest.model');
 
 const getMyAgentsController = async (req, res, next) => {
 	try {
@@ -13,7 +13,7 @@ const getMyAgentsController = async (req, res, next) => {
             return res.status(404).send({
                 code: res.statusCode,
                 message: 'no agents found',
-            });
+                });
         }
 
         return res.status(200).send({
