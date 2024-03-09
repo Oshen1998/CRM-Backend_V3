@@ -4,11 +4,12 @@ const accessRequestSchema = new Schema(
 	{
         supervisor: { type: Schema.Types.ObjectId, ref: 'user' },
 		agent: { type: Schema.Types.ObjectId, ref: 'user' },
-        status: { type: String, enum: ['pending', 'accepted', 'declined'], default: 'pending' }
+        status: { type: String, enum: ['pending', 'accepted', 'declined'], default: 'pending' },
+		token: { type: String, required: true },
 	},
 	{ timestamps: true },
 );
 
-const accessRequestModel = model('tag', accessRequestSchema);
+const accessRequestModel = model('accessRequest', accessRequestSchema);
 
 module.exports = accessRequestModel;

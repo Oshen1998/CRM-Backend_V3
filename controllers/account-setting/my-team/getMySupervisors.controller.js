@@ -1,6 +1,6 @@
 'use strict';
 
-const accessRequestModel = require('../../models/accessRequest.model');
+const accessRequestModel = require('../../../models/accessRequest.model');
 
 const getMySupervisorsController = async (req, res, next) => {
 	try {
