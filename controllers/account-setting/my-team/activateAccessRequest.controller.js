@@ -3,6 +3,8 @@
 const accessRequestModel = require('../../../models/accessRequest.model');
 const userModel = require('../../../models/user.model');
 const sendMail = require('../../../utils/sendEmails.utils');
+const { env } = require('process');
+
 
 const activateAccessRequest = async (req, res, next) => {
 	try {
@@ -37,7 +39,7 @@ const activateAccessRequest = async (req, res, next) => {
                 </div>
                 <script>
                     setTimeout(() => {
-                        window.location.href = 'http://127.0.0.1:5173/';
+                        window.location.href = '${env.CLIENT_URL}';
                     }, 5000);
                 </script>
             </body>
@@ -73,7 +75,7 @@ const activateAccessRequest = async (req, res, next) => {
                 </div>
                 <script>
                     setTimeout(() => {
-                        window.location.href = 'http://127.0.0.1:5173/';
+                        window.location.href = '${env.CLIENT_URL}';
                     }, 5000);
                 </script>
             </body>
@@ -109,7 +111,7 @@ const activateAccessRequest = async (req, res, next) => {
                 </div>
                 <script>
                     setTimeout(() => {
-                        window.location.href = 'http://127.0.0.1:5173/';
+                        window.location.href = '${env.CLIENT_URL}';
                     }, 5000);
                 </script>
             </body>
@@ -148,7 +150,7 @@ const activateAccessRequest = async (req, res, next) => {
             </div>
             <script>
                 setTimeout(() => {
-                    window.location.href = 'http://127.0.0.1:5173/';
+                    window.location.href = '${env.CLIENT_URL}';
                 }, 5000);
             </script>
         </body>
