@@ -14,39 +14,108 @@ const activateAccessRequest = async (req, res, next) => {
             return res.status(404).set('Content-Type', 'text/html').send(`
             <html>
             <head>
-                <title>Access Request</title>
+                <title>Access Request Accepted</title>
+                <meta http-equiv="refresh" content="5;url=/">
+                <style>
+                    body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    h1 {
+                        text-align: center;
+                    }
+                </style>
             </head>
-                 <body>
-                <h1>Access request not found</h1>
-                 </body>
-                </html>
-           `);
+            <body>
+                <div>
+                    <h1>Access request not found</h1>
+                    <p>You will be redirected to the home page in 5 seconds...</p>
+                </div>
+                <script>
+                    setTimeout(() => {
+                        window.location.href = 'http://127.0.0.1:5173/';
+                    }, 5000);
+                </script>
+            </body>
+            </html>
+        `);
+        
         }
 
         if(accessRequest.status === 'accepted'){
             return res.status(202).set('Content-Type', 'text/html').send(`
             <html>
             <head>
-                <title>Access Request</title>
+                <title>Access Request Accepted</title>
+                <meta http-equiv="refresh" content="5;url=/">
+                <style>
+                    body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    h1 {
+                        text-align: center;
+                    }
+                </style>
             </head>
-                 <body>
-                <h1>Access request already accepted</h1>
-                 </body>
-                </html>
-           `);
+            <body>
+                <div>
+                    <h1>Access request already accepted</h1>
+                    <p>You will be redirected to the home page in 5 seconds...</p>
+                </div>
+                <script>
+                    setTimeout(() => {
+                        window.location.href = 'http://127.0.0.1:5173/';
+                    }, 5000);
+                </script>
+            </body>
+            </html>
+        `);
+        
         }
 
         if(accessRequest.status === 'declined'){
-            return res.status(202).set('Content-Type', 'text/html').send(`
+            return res.status(201).set('Content-Type', 'text/html').send(`
             <html>
             <head>
-                <title>Access Request</title>
+                <title>Access Request Accepted</title>
+                <meta http-equiv="refresh" content="5;url=/">
+                <style>
+                    body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    h1 {
+                        text-align: center;
+                    }
+                </style>
             </head>
-                 <body>
-                <h1>Access request already declined</h1>
-                 </body>
-                </html>
-           `);
+            <body>
+                <div>
+                    <h1>Access request already declined</h1>
+                    <p>You will be redirected to the home page in 5 seconds...</p>
+                </div>
+                <script>
+                    setTimeout(() => {
+                        window.location.href = 'http://127.0.0.1:5173/';
+                    }, 5000);
+                </script>
+            </body>
+            </html>
+        `);
+        
         }
 
         //update the access request status to accepted
@@ -57,12 +126,35 @@ const activateAccessRequest = async (req, res, next) => {
         <html>
         <head>
             <title>Access Request Accepted</title>
+            <meta http-equiv="refresh" content="5;url=/">
+            <style>
+                body {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                    padding: 0;
+                }
+                h1 {
+                    text-align: center;
+                }
+            </style>
         </head>
-             <body>
-            <h1>Access request accepted successfully</h1>
-             </body>
-            </html>
-       `);
+        <body>
+            <div>
+                <h1>Access request accepted successfully</h1>
+                <p>You will be redirected to the home page in 5 seconds...</p>
+            </div>
+            <script>
+                setTimeout(() => {
+                    window.location.href = 'http://127.0.0.1:5173/';
+                }, 5000);
+            </script>
+        </body>
+        </html>
+    `);
+    
 
 
 	} catch (error) {

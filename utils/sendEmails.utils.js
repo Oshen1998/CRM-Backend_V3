@@ -22,6 +22,7 @@ module.exports = async (email, subject, text) => {
 		});
         return true;
 	} catch (error) {
+		console.log('Error during sending email:', error);
 		return false;
 	}
 };
