@@ -12,9 +12,9 @@ const sendAccessRequestController = async (req, res, next) => {
 
         let count = 0;
 
-        let user = await userModel.findOne ({ _id: id });
+        let existingUser = await userModel.findOne ({ _id: id });
 
-        if (!user){
+        if (!existingUser){
             return res.status(404).send({
                 code: res.statusCode,
                 message: 'user not found',
@@ -42,7 +42,9 @@ const sendAccessRequestController = async (req, res, next) => {
 
             //send emails to the users
 
-            const result = await sendMail(user.email, 'Access Request', `You have received an access request from ${user.fullname} to join their team. Click here to accept the request ${activationLink}`);
+            console.log(user.email)
+
+            const result = await sendMail(user.email, 'Access Request', `You have received an access request from ${existingUser.fullname} to join their team. Click here to accept the request ${activationLink}`);
 
             if (result) {
                 count++;

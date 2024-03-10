@@ -18,11 +18,13 @@ const loginController = async (req, res) => {
 
     const token = genToken({ email: user.email, password: user.password });
 
-    return res.status(200).json({
+    return res.status(201).json({
       code: res.statusCode,
       message: 'Successfully logged in 😁',
-      token,
+      token : token,
+      userId : user._id,
     });
+    
   } catch (error) {
     console.error('Error during login:', error);
     return res.status(500).send({
