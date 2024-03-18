@@ -1,8 +1,8 @@
 const { Router } = require('express');
-const { sendAccessRequest } = require('../controllers/account-setting/my-team/my-team.controller');
+const { sendAccessRequest } = require('../controllers/account-setting/my-team/send-access-request.controller');
 
 const myTeamRouter = Router();
 
-myTeamRouter.post('/myteam', sendAccessRequest);
+myTeamRouter.post('/send-access-request', sendAccessRequest);
 
 module.exports = myTeamRouter;
