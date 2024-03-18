@@ -1,75 +1,53 @@
-'use strict';
+const UserModel = require('../../../models/user.model');
+const MyTeam = require('../../../models/my-team.model');
 
-const accessRequestModel = require('../../../models/accessRequest.model');
-const userModel = require('../../../models/user.model');
-const sendMail = require('../../../utils/sendEmails.utils');
-const crypto = require('crypto');
-
-const sendAccessRequestController = async (req, res, next) => {
+const sendAccessRequest = async (req, res, next) => {
 	try {
-		const { emails } = req.body;
-		const { id } = req.params;
+		const { user, emailList } = req.body;
 
-		let count = 0;
+		const myTeam = await MyTeam.findOne({ user }).populate({
+			path: 'team.user',
+			select: 'email'
+		});
 
-		let existingUser = await userModel.findOne({ _id: id });
+		if (myTeam) {
+			const teams = await UserModel.find({ email: { $in: emailList } });
 
-		if (!existingUser) {
-			return res.status(404).send({
-				code: res.statusCode,
-				message: 'user not found'
-			});
-		}
+			//Remain send notification to agent newly added
+			// const filterMails =  emailList.filter(item => !myTeam.team.includes(item))
+			// console.log(filterMails)
 
-		let users = await userModel.find({ email: { $in: emails } });
+			const refactorTeamObj = teams.map((user) => ({
+				user: user,
+				status: 'pending'
+			}));
 
-		//add access request to each user with the user id as the agent and my id as the supervisor if that record already available remove that and add new record
-
-		await Promise.all(
-			users.map(async (user) => {
-				let accessRequest = await accessRequestModel.findOne({ supervisor: id, agent: user._id });
-
-				if (accessRequest) {
-					await accessRequestModel.deleteOne({ supervisor: id, agent: user._id });
-				}
-
-				// Generate activation token
-				const token = crypto.randomBytes(20).toString('hex');
-
-				await accessRequestModel.create({ supervisor: id, agent: user._id, token: token });
-
-				// Send activation email
-				const activationLink = `https://crm-backend-v3.onrender.com/my-team/activate/${token}`;
-
-				//send emails to the users
-
-				console.log(user.email);
-
-				const result = await sendMail(
-					user.email,
-					'Access Request',
-					`You have received an access request from ${existingUser.fullname} to join their team. Click here to accept the request ${activationLink}`
-				);
-
-				if (result) {
-					count++;
-				}
-
-				//send email to the users
+			MyTeam.findOneAndUpdate({ user }, { team: refactorTeamObj })
+				.then((response) => {
+					res.status(200).send(response);
+				})
+				.catch((error) => {
+					res.status(400).send({ error: error.message });
+				});
+		} else {
+			await MyTeam.create({
+				user,
+				team: refactorTeamObj
 			})
-		);
+				.then((response) => {
+					res.status(200).send(response);
+				})
+				.catch((error) => {
+					res.status(400).send({ error: error.message });
+				});
 
-		return res.status(201).send({
-			code: res.statusCode,
-			message: `access request sent to ${count} mails successfully`
-		});
+			//Remain send notification to agent newly added
+		}
 	} catch (error) {
-		console.error('Error during sending access request:', error);
-		return res.status(500).send({
-			code: 500,
-			error: { message: 'An internal server error occurred' }
-		});
+		console.error(error.message);
 	}
 };
 
-module.exports = sendAccessRequestController;
+module.exports = {
+	sendAccessRequest
+};
