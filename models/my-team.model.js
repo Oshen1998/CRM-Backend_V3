@@ -12,8 +12,8 @@ const MyTeamSchema = new Schema(
 				},
 				status: {
 					type: String,
-					enum: ['pending', 'accepted', 'declined'],
-					default: 'pending',
+					enum: ['PENDING', 'ACCEPTED', 'DECLINED'],
+					default: 'PENDING',
 					required: true
 				}
 			}
