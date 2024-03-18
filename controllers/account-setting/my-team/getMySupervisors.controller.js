@@ -1,32 +1,37 @@
-'use strict';
-
-const accessRequestModel = require('../../../models/accessRequest.model');
+const MyTeamModel = require('../../../models/my-team.model');
 
 const getMySupervisorsController = async (req, res, next) => {
 	try {
-		const { id } = req.params;
+		const { user } = req.params;
 
-		//get all the access requests where the agent is me and status is accepted
-		let accessRequests = await accessRequestModel
-			.find({ agent: id, status: 'accepted' })
-			.populate('supervisor', 'fullname email');
+		const myTeams = await MyTeamModel.findOne({ user }).populate({
+			path: 'team.user'
+		});
 
-		if (accessRequests.length === 0) {
+		if (myTeams) {
+			const supervisorList = myTeams.team.map((item) => {
+				//Until implement user roles
+				if (item.user.role === 'user') {
+					return { _id: item.user._id, fullname: item.user.fullname, email: item.user.email };
+				}
+			});
+
+			return res.status(200).send({
+				code: res.statusCode,
+				message: 'supervisors found',
+				supervisors: supervisorList
+			});
+		} else {
 			return res.status(404).send({
 				code: res.statusCode,
-				message: 'no supervisors found'
+				message: 'supervisors not found',
+				supervisors: []
 			});
 		}
-
-		return res.status(200).send({
-			code: res.statusCode,
-			message: 'supervisors found',
-			supervisors: accessRequests
-		});
 	} catch (error) {
 		return res.status(500).send({
 			code: 500,
-			error: { message: 'An internal server error occurred' }
+			error: { message: error.message }
 		});
 	}
 };
