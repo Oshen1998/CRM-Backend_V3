@@ -1,5 +1,6 @@
 const MyTeamModel = require('../../../models/my-team.model');
-const { Types, model } = require('mongoose');
+const { getSupervisorsListForMyTeam, getAgentsListForMyTeam } = require('../../../services/myteam.service');
+
 const removeAccessFromMyTeam = async (req, res, next) => {
 	try {
 		const { user } = req.params;
@@ -15,10 +16,15 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 				(item) => !item.user._id.equals(disconnectUserId)
 			);
 			MyTeamModel.findOneAndUpdate({ user }, { team: filteredUserList }, { new: true })
-				.then((response) => {
+				.then(async (response) => {
+					const supervisorList = await getSupervisorsListForMyTeam(user);
+					const agentList = await getAgentsListForMyTeam(user);
+				
 					res.status(200).send({
 						code: res.statusCode,
-						message: response
+						message: response,
+						supervisors: supervisorList,
+						agents: agentList
 					});
 				})
 				.catch((error) => {
