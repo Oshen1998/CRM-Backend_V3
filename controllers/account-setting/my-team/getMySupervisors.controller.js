@@ -10,7 +10,7 @@ const getMySupervisorsController = async (req, res, next) => {
 
 		if (myTeams) {
 			const supervisorList = myTeams.team.map((item) => {
-				//Until implement user roles
+				//Until implement user roles and status
 				if (item.user.role === 'user') {
 					return { _id: item.user._id, fullname: item.user.fullname, email: item.user.email };
 				}
