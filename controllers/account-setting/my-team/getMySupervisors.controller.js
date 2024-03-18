@@ -18,13 +18,13 @@ const getMySupervisorsController = async (req, res, next) => {
 
 			return res.status(200).send({
 				code: res.statusCode,
-				message: 'supervisors found',
+				message: 'Supervisors found',
 				supervisors: supervisorList
 			});
 		} else {
 			return res.status(404).send({
 				code: res.statusCode,
-				message: 'supervisors not found',
+				message: 'Supervisors not found',
 				supervisors: []
 			});
 		}
