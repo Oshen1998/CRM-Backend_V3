@@ -5,15 +5,14 @@ const userModel = require('../../../models/user.model');
 const sendMail = require('../../../utils/sendEmails.utils');
 const { env } = require('process');
 
-
 const activateAccessRequest = async (req, res, next) => {
 	try {
-        const { token } = req.params;
+		const { token } = req.params;
 
-        let accessRequest = await accessRequestModel.findOne({ token });
+		let accessRequest = await accessRequestModel.findOne({ token });
 
-        if (!accessRequest){
-            return res.status(404).set('Content-Type', 'text/html').send(`
+		if (!accessRequest) {
+			return res.status(404).set('Content-Type', 'text/html').send(`
             <html>
             <head>
                 <title>Access Request Accepted</title>
@@ -45,11 +44,10 @@ const activateAccessRequest = async (req, res, next) => {
             </body>
             </html>
         `);
-        
-        }
+		}
 
-        if(accessRequest.status === 'accepted'){
-            return res.status(202).set('Content-Type', 'text/html').send(`
+		if (accessRequest.status === 'accepted') {
+			return res.status(202).set('Content-Type', 'text/html').send(`
             <html>
             <head>
                 <title>Access Request Accepted</title>
@@ -81,11 +79,10 @@ const activateAccessRequest = async (req, res, next) => {
             </body>
             </html>
         `);
-        
-        }
+		}
 
-        if(accessRequest.status === 'declined'){
-            return res.status(201).set('Content-Type', 'text/html').send(`
+		if (accessRequest.status === 'declined') {
+			return res.status(201).set('Content-Type', 'text/html').send(`
             <html>
             <head>
                 <title>Access Request Accepted</title>
@@ -117,14 +114,13 @@ const activateAccessRequest = async (req, res, next) => {
             </body>
             </html>
         `);
-        
-        }
+		}
 
-        //update the access request status to accepted
-        accessRequest.status = 'accepted';
-        await accessRequest.save();
+		//update the access request status to accepted
+		accessRequest.status = 'accepted';
+		await accessRequest.save();
 
-        return res.status(201).set('Content-Type', 'text/html').send(`
+		return res.status(201).set('Content-Type', 'text/html').send(`
         <html>
         <head>
             <title>Access Request Accepted</title>
@@ -156,15 +152,12 @@ const activateAccessRequest = async (req, res, next) => {
         </body>
         </html>
     `);
-    
-
-
 	} catch (error) {
-        console.error('Error during sending access request:', error);
-    return res.status(500).send({
-      code: 500,
-      error: { message: 'An internal server error occurred' },
-    });
+		console.error('Error during sending access request:', error);
+		return res.status(500).send({
+			code: 500,
+			error: { message: 'An internal server error occurred' }
+		});
 	}
 };
 

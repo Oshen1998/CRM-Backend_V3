@@ -13,5 +13,4 @@ authRouter.get('/get-my-supervisors/:id', getMySupervisorsController);
 authRouter.get('/get-my-agents/:id', getMyAgentsController);
 authRouter.get('/activate/:token', activateAccessRequest);
 
-
 module.exports = authRouter;

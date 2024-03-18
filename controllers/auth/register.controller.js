@@ -8,14 +8,14 @@ const registerController = async (req, res, next) => {
 		let { firstName, lastName, email, password, mobile, timeZone } = req.body;
 
 		let fullname = `${firstName} ${lastName}`;
-		
+
 		//check email existence
 		let userExist = await userModel.findOne({ email });
 
-		if (userExist){
+		if (userExist) {
 			return res.status(409).send({
 				code: res.statusCode,
-				message: 'email already exists',
+				message: 'email already exists'
 			});
 		}
 
@@ -24,21 +24,20 @@ const registerController = async (req, res, next) => {
 			email,
 			password: hashPassword(password),
 			mobile,
-			timeZone,
+			timeZone
 		});
 
 		if (user)
 			return res.status(201).send({
 				code: res.statusCode,
 				message: 'user created successfully',
-				user,
+				user
 			});
-
 	} catch (error) {
-    return res.status(500).send({
-      code: 500,
-      error: { message: 'An internal server error occurred' },
-    });
+		return res.status(500).send({
+			code: 500,
+			error: { message: 'An internal server error occurred' }
+		});
 	}
 };
 

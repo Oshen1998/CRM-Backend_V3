@@ -3,7 +3,7 @@ const { Router } = require('express');
 const indexController = require('../controllers/index.controller');
 const authRouter = require('./auth.routes');
 const profileRouter = require('./profile.routes');
-const myTeamRouter = require('./accessController.routes');
+const myTeamRouter = require('./my-team.routes');
 
 const router = Router();
 
