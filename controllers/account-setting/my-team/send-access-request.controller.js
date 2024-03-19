@@ -11,24 +11,32 @@ const sendAccessRequest = async (req, res, next) => {
 		});
 
 		if (myTeam) {
-			const teams = await UserModel.find({ email: { $in: emailList } });
-
-			//Remain send notification to agent newly added
-			// const filterMails =  emailList.filter(item => !myTeam.team.includes(item))
-			// console.log(filterMails)
+			const existingEmails = myTeam.team.map(member => member.user.email);
+			let filteredEmailList = []
+			if (existingEmails.length > 0) {
+				filteredEmailList = emailList.filter(email => !existingEmails.includes(email));
+			}else{
+				filteredEmailList = emailList
+			}
+            console.log('filteredEmailList', filteredEmailList);
+			const teams = await UserModel.find({ email: { $in: filteredEmailList } });
 
 			const refactorTeamObj = teams.map((user) => ({
 				user: user,
 				status: 'pending'
 			}));
 
-			MyTeam.findOneAndUpdate({ user }, { team: refactorTeamObj })
-				.then((response) => {
-					res.status(200).send(response);
-				})
-				.catch((error) => {
-					res.status(400).send({ error: error.message });
-				});
+			if (refactorTeamObj.length) {
+				MyTeam.findOneAndUpdate({ user }, { $push: { team: { $each: refactorTeamObj } } }, { new: true })
+					.then((response) => {
+						res.status(200).send(response);
+					})
+					.catch((error) => {
+						res.status(400).send({ error: error.message });
+					});
+			} else {
+				res.status(404).send({ message: 'No accounts adding found for email list' });
+			}
 		} else {
 			await MyTeam.create({
 				user,
