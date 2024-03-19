@@ -43,6 +43,13 @@ const sendAccessRequest = async (req, res, next) => {
 				res.status(404).send({ message: 'No accounts adding found for email list' });
 			}
 		} else {
+			const teams = await UserModel.find({ email: { $in: emailList } });
+
+			const refactorTeamObj = teams.map((user) => ({
+				user: user,
+				status: 'PENDING'
+			}));
+
 			await MyTeam.create({
 				user,
 				team: refactorTeamObj
