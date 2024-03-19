@@ -37,5 +37,34 @@ const getAgentsListForMyTeam = async (user) => {
 	}
 };
 
-module.exports = { getSupervisorsListForMyTeam, getAgentsListForMyTeam };
+const getAccessRequests = async (user) => {
+	const teams = await MyTeamModel.find({ 'team.user': user })
+		.populate({
+			path: 'team.user'
+		})
+		.populate({
+			path: 'user'
+		})
+		.exec()
+		.catch((error) => {
+			throw new Error(error);
+		});
+
+	if (teams.length) {
+		const data = teams.map((team) => ({
+			documentId: team._id,
+			requestId: team.team.find((member) => member.user._id.toString() === user)._id,
+			email: team.user.email,
+			fullname: team.user.fullname,
+			userIdForAccess: team.user._id,
+			status: team.team.find((member) => member.user._id.toString() === user).status
+		}));
+		console.log('data ss', data);
+		return data;
+	} else {
+		return [];
+	}
+};
+
+module.exports = { getSupervisorsListForMyTeam, getAgentsListForMyTeam, getAccessRequests };
 
