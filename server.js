@@ -24,7 +24,5 @@ app.use(notFoundErrorHandler);
 app.use(errorHandler);
 
 server.listen(PORT, () =>
-	console.log(
-		`server is running on port : ${PORT},\n http://localhost:${PORT}`,
-	),
+	console.log(`server is running on port : ${PORT},\n http://localhost:${PORT}`)
 );

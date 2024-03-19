@@ -7,15 +7,14 @@ const userSchema = new Schema(
 		password: { type: String, minLength: 8, required: true },
 		role: { type: String, default: 'user' },
 		status: { type: String, default: 'active' },
-		username : { type: String },
+		username: { type: String },
 		profilePicture: { type: String },
 		coverPicture: { type: String },
 		mobile: { type: String },
 		bio: { type: String },
-		timeZone: { type: String },
-		
+		timeZone: { type: String }
 	},
-	{ timestamps: true },
+	{ timestamps: true }
 );
 
 const userModel = model('user', userSchema);
