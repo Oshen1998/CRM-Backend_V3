@@ -35,7 +35,7 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 					});
 				});
 		} else {
-			res.status(404).send({
+			res.status(400).send({
 				code: res.statusCode,
 				message: 'No Team Found'
 			});
@@ -43,8 +43,9 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send({
-			code: res.statusCode,
-			message: error.message
+			code: 500,
+			message: 'Something went wrong',
+			error: { message: error.message }
 		});
 	}
 };

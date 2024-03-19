@@ -6,22 +6,16 @@ const getMyAgentsController = async (req, res, next) => {
 		const { user } = req.params;
 
 		const data = await getAgentsListForMyTeam(user);
-		if (data.length) {
-			return res.status(200).send({
-				code: res.statusCode,
-				message: 'Agents found',
-				agents: data
-			});
-		} else {
-			return res.status(404).send({
-				code: res.statusCode,
-				message: 'Agents not found',
-				agents: []
-			});
-		}
+
+		return res.status(200).send({
+			code: res.statusCode,
+			message: data.length ? 'Agents found' : 'No Agents found',
+			agents: data
+		});
 	} catch (error) {
 		return res.status(500).send({
 			code: 500,
+			message: 'Something went wrong',
 			error: { message: error.message }
 		});
 	}

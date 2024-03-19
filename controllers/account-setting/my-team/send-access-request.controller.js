@@ -12,23 +12,27 @@ const sendAccessRequest = async (req, res, next) => {
 		});
 
 		if (myTeam) {
-			const existingEmails = myTeam.team.map(member => member.user.email);
-			let filteredEmailList = []
+			const existingEmails = myTeam.team.map((member) => member.user.email);
+			let filteredEmailList = [];
 			if (existingEmails.length > 0) {
-				filteredEmailList = emailList.filter(email => !existingEmails.includes(email));
-			}else{
-				filteredEmailList = emailList
+				filteredEmailList = emailList.filter((email) => !existingEmails.includes(email));
+			} else {
+				filteredEmailList = emailList;
 			}
-            console.log('filteredEmailList', filteredEmailList);
+			console.log('filteredEmailList', filteredEmailList);
 			const teams = await UserModel.find({ email: { $in: filteredEmailList } });
 
 			const refactorTeamObj = teams.map((user) => ({
 				user: user,
-				status: 'pending'
+				status: 'PENDING'
 			}));
 
 			if (refactorTeamObj.length) {
-				MyTeam.findOneAndUpdate({ user }, { $push: { team: { $each: refactorTeamObj } } }, { new: true })
+				MyTeam.findOneAndUpdate(
+					{ user },
+					{ $push: { team: { $each: refactorTeamObj } } },
+					{ new: true }
+				)
 					.then((response) => {
 						res.status(200).send(response);
 					})
@@ -54,7 +58,9 @@ const sendAccessRequest = async (req, res, next) => {
 		}
 	} catch (error) {
 		console.error(error.message);
-		res.status(500).send({ error: error.message });
+		res
+			.status(500)
+			.send({ code: 500, message: 'Something went wrong', error: { message: error.message } });
 	}
 };
 

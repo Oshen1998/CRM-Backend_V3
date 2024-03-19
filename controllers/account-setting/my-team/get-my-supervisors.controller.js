@@ -5,24 +5,16 @@ const getMySupervisorsController = async (req, res, next) => {
 	try {
 		const { user } = req.params;
 
-		const data = await getSupervisorsListForMyTeam(user)
-		if(data.length){
-			return res.status(200).send({
-				code: res.statusCode,
-				message: 'Supervisors found',
-				supervisors: data
-			});
-		}else{
-			return res.status(404).send({
-				code: res.statusCode,
-				message: 'Supervisors not found',
-				supervisors: []
-			});
-		}
-
+		const data = await getSupervisorsListForMyTeam(user);
+		return res.status(200).send({
+			code: res.statusCode,
+			message: data.length ? 'Supervisors found' : 'No Supervisors found',
+			supervisors: data
+		});
 	} catch (error) {
 		return res.status(500).send({
 			code: 500,
+			message: 'Something went wrong',
 			error: { message: error.message }
 		});
 	}
