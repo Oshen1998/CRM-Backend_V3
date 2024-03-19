@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const { sendAccessRequest } = require('../controllers/account-setting/my-team/send-access-request.controller');
-const getMySupervisorsController = require('../controllers/account-setting/my-team/getMySupervisors.controller');
-const getMyAgentsController = require('../controllers/account-setting/my-team/getMyAgents.controller');
-const removeAccessFromMyTeam = require('../controllers/account-setting/my-team/removeAccessFromMyTeam');
+const getMySupervisorsController = require('../controllers/account-setting/my-team/get-my-supervisors.controller');
+const getMyAgentsController = require('../controllers/account-setting/my-team/get-my-agents.controller');
+const removeAccessFromMyTeam = require('../controllers/account-setting/my-team/remove-access-from-myteam.controller');
 const fetchAccessRequests = require('../controllers/account-setting/my-team/fetch-acces-requests.controller');
 
 
