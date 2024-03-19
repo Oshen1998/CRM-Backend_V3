@@ -1,3 +1,4 @@
+'use strict';
 const UserModel = require('../../../models/user.model');
 const MyTeam = require('../../../models/my-team.model');
 

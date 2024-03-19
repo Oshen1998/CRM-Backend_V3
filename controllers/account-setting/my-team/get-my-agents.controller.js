@@ -1,3 +1,4 @@
+'use strict';
 const { getAgentsListForMyTeam } = require('../../../services/myteam.service');
 
 const getMyAgentsController = async (req, res, next) => {

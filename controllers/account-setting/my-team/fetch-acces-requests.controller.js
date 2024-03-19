@@ -1,3 +1,4 @@
+'use strict';
 const MyTeamModel = require('../../../models/my-team.model');
 
 const fetchAccessRequests = async (req, res, next) => {
@@ -41,7 +42,14 @@ const fetchAccessRequests = async (req, res, next) => {
 					error: { message: error.message }
 				});
 			});
-	} catch (error) {}
+	} catch (error) {
+		console.error('Error occurred:', error);
+		return res.status(500).send({
+			code: res.statusCode,
+			message: 'Something went wrong',
+			error: { message: error.message }
+		});
+	}
 };
 
 module.exports = fetchAccessRequests;

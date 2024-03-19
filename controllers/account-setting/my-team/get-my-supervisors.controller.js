@@ -1,4 +1,4 @@
-const MyTeamModel = require('../../../models/my-team.model');
+'use strict';
 const { getSupervisorsListForMyTeam } = require('../../../services/myteam.service');
 
 const getMySupervisorsController = async (req, res, next) => {
@@ -19,7 +19,6 @@ const getMySupervisorsController = async (req, res, next) => {
 				supervisors: []
 			});
 		}
-
 
 	} catch (error) {
 		return res.status(500).send({

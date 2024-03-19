@@ -1,3 +1,4 @@
+'use strict';
 const MyTeamModel = require('../../../models/my-team.model');
 const { getSupervisorsListForMyTeam, getAgentsListForMyTeam } = require('../../../services/myteam.service');
 
