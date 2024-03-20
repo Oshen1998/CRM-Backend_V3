@@ -2,7 +2,8 @@
 const MyTeamModel = require('../../../models/my-team.model');
 const { getSupervisorsListForMyTeam, getAgentsListForMyTeam } = require('../../../services/myteam.service');
 
-const removeAccessFromMyTeam = async (req, res, next) => {
+//Remaining to implement
+const removeAccessByUser = async (req, res, next) => {
 	try {
 		if (myTeam) {
 			const filteredUserList = myTeam.team.filter(
@@ -42,5 +43,5 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 	}
 };
 
-module.exports = removeAccessFromMyTeam;
+module.exports = removeAccessByUser;
 

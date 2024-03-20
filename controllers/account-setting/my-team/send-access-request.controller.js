@@ -1,17 +1,19 @@
 'use strict';
 const UserModel = require('../../../models/user.model');
 const MyTeam = require('../../../models/my-team.model');
-const { emitMessage } = require('../../../socket');
+const { addNotificationFunc } = require('../../../services/notification.service');
 const sendAccessRequest = async (req, res, next) => {
-	emitMessage("hello" + Math.random())
 	try {
 		const { user, emailList } = req.body;
+
+		const currentUserDetails = await UserModel.findById(user);
 
 		const myTeam = await MyTeam.findOne({ user }).populate({
 			path: 'team.user',
 			select: 'email'
 		});
 
+		console.log(currentUserDetails.fullname)
 		if (myTeam) {
 			const existingEmails = myTeam.team.map((member) => member.user.email);
 			let filteredEmailList = [];
@@ -21,9 +23,9 @@ const sendAccessRequest = async (req, res, next) => {
 				filteredEmailList = emailList;
 			}
 			console.log('filteredEmailList', filteredEmailList);
-			const teams = await UserModel.find({ email: { $in: filteredEmailList } });
+			const userList = await UserModel.find({ email: { $in: filteredEmailList } });
 
-			const refactorTeamObj = teams.map((user) => ({
+			const refactorTeamObj = userList.map((user) => ({
 				user: user,
 				status: 'PENDING'
 			}));
@@ -34,9 +36,11 @@ const sendAccessRequest = async (req, res, next) => {
 					{ $push: { team: { $each: refactorTeamObj } } },
 					{ new: true }
 				)
-					.then((response) => {
+					.then(async (response) => {
+						await userList.forEach(async (user) => {
+							await addNotificationFunc(user, `${currentUserDetails.fullname} requested my Team access from you`);
+						})
 						res.status(200).send(response);
-						
 					})
 					.catch((error) => {
 						res.status(400).send({ error: error.message });
@@ -45,9 +49,9 @@ const sendAccessRequest = async (req, res, next) => {
 				res.status(404).send({ message: 'No accounts adding found for email list' });
 			}
 		} else {
-			const teams = await UserModel.find({ email: { $in: emailList } });
+			const userList = await UserModel.find({ email: { $in: emailList } });
 
-			const refactorTeamObj = teams.map((user) => ({
+			const refactorTeamObj = userList.map((user) => ({
 				user: user,
 				status: 'PENDING'
 			}));
