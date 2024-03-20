@@ -23,7 +23,7 @@ const fetchUserNotificationFunc = async (user) => {
 	try {
 		return await NotificationModel.find({
 			user
-		}).sort({'updatedAt': -1})
+		}).sort({'createdAt': -1})
 			.then((response) => {
 				return response;
 			})
