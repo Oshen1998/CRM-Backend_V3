@@ -1,8 +1,9 @@
 'use strict';
 const UserModel = require('../../../models/user.model');
 const MyTeam = require('../../../models/my-team.model');
-
+const { emitMessage } = require('../../../socket');
 const sendAccessRequest = async (req, res, next) => {
+	emitMessage("hello" + Math.random())
 	try {
 		const { user, emailList } = req.body;
 
@@ -35,6 +36,7 @@ const sendAccessRequest = async (req, res, next) => {
 				)
 					.then((response) => {
 						res.status(200).send(response);
+						
 					})
 					.catch((error) => {
 						res.status(400).send({ error: error.message });
