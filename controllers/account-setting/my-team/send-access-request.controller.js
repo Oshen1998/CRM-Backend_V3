@@ -13,7 +13,6 @@ const sendAccessRequest = async (req, res, next) => {
 			select: 'email'
 		});
 
-		console.log(currentUserDetails.fullname)
 		if (myTeam) {
 			const existingEmails = myTeam.team.map((member) => member.user.email);
 			let filteredEmailList = [];
@@ -38,7 +37,7 @@ const sendAccessRequest = async (req, res, next) => {
 				)
 					.then(async (response) => {
 						await userList.forEach(async (user) => {
-							await addNotificationFunc(user, `${currentUserDetails.fullname} requested my Team access from you`);
+							await addNotificationFunc(user, `${currentUserDetails.firstName} ${currentUserDetails.lastName} requested my team access from you`);
 						})
 						res.status(200).send(response);
 					})

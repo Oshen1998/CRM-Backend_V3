@@ -11,8 +11,8 @@ const getSupervisorsListForMyTeam = async (user) => {
 			const supervisorList = myTeams.team.map((item) => {
 				//Until implement user roles and status
 
-				if (item.user.role === 'user') {
-					return { _id: item.user._id, fullname: item.user.fullname, email: item.user.email };
+				if (item.user.role === 'user' || true) {
+					return { _id: item.user._id, firstName: item.user.firstName, lastName: item.user.lastName , email: item.user.email };
 				}
 			});
 			return supervisorList;
@@ -33,8 +33,8 @@ const getAgentsListForMyTeam = async (user) => {
 		if (myTeams) {
 			const agentList = myTeams.team.map((item) => {
 				//Until implement user roles and status
-				if (item.user.role === 'user') {
-					return { _id: item.user._id, fullname: item.user.fullname, email: item.user.email };
+				if (item.user.role === 'user' || true) {
+					return { _id: item.user._id, firstName: item.user.firstName, lastName: item.user.lastName, email: item.user.email };
 				}
 			});
 			return agentList;
@@ -65,7 +65,8 @@ const getAccessRequests = async (user) => {
 				documentId: team._id,
 				requestId: team.team.find((member) => member.user._id.toString() === user)._id,
 				email: team.user.email,
-				fullname: team.user.fullname,
+				firstName: team.user.firstName,
+				lastName: team.user.lastName,
 				userIdForAccess: team.user._id,
 				status: team.team.find((member) => member.user._id.toString() === user).status
 			}));
