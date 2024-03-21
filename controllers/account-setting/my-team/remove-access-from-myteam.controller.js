@@ -23,7 +23,7 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 			MyTeamModel.findOneAndUpdate({ user }, { team: filteredUserList }, { new: true })
 				.then(async (response) => {
 
-					await addNotificationFunc(disconnectUserId, `${currentUserDetails.fullname} removed My Team access from you`);
+					await addNotificationFunc(disconnectUserId, `${currentUserDetails.firstName} ${currentUserDetails.lastName} removed my team access from you`);
 
 					const supervisorList = await getSupervisorsListForMyTeam(user);
 					const agentList = await getAgentsListForMyTeam(user);

@@ -1,44 +1,37 @@
 'use strict';
-
-const userModel = require('../../models/user.model');
-const { hashPassword } = require('../../utils/auth.utils');
+const bcrypt = require('bcrypt');
+const UserModel = require('../../models/user.model');
 
 const registerController = async (req, res, next) => {
-	try {
-		let { firstName, lastName, email, password, mobile, timeZone } = req.body;
+    const { firstName, lastName, password, email, role } = req.body;
 
-		let fullname = `${firstName} ${lastName}`;
+    try {
+        // Check if email already exists
+        const existingUser = await UserModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Username or email already exists' });
+        }
 
-		//check email existence
-		let userExist = await userModel.findOne({ email });
+        // Hash the password before saving
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-		if (userExist) {
-			return res.status(409).send({
-				code: res.statusCode,
-				message: 'email already exists'
-			});
-		}
+        // Create a new user
+        const newUser = new UserModel({
+            firstName,
+			lastName,
+            password: hashedPassword,
+            email,
+            role: role || 'CRM_USER' // Default role to 'CRM_USER' if not specified
+        });
 
-		let user = await userModel.create({
-			fullname,
-			email,
-			password: hashPassword(password),
-			mobile,
-			timeZone
-		});
+        // Save the user to the database
+        await newUser.save();
 
-		if (user)
-			return res.status(201).send({
-				code: res.statusCode,
-				message: 'user created successfully',
-				user
-			});
-	} catch (error) {
-		return res.status(500).send({
-			code: 500,
-			error: { message: 'An internal server error occurred' }
-		});
-	}
+        res.status(201).json({ message: 'User registered successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 };
 
 module.exports = registerController;
