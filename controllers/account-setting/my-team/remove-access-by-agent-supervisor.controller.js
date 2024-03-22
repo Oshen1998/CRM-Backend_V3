@@ -1,6 +1,7 @@
 'use strict';
 const MyTeamModel = require('../../../models/my-team.model');
 const { getAccessRequests } = require('../../../services/myteam.service');
+const { addNotificationFunc } = require('../../../services/notification.service');
 
 //Remaining to implement
 const removeMyTeamAccessRequestByAgentOrSupervisor = async (req, res, next) => {
@@ -13,7 +14,9 @@ const removeMyTeamAccessRequestByAgentOrSupervisor = async (req, res, next) => {
 			{ $pull: { team: { user: user.id, _id: requestId } } },
 			{ new: true }
 		)
-			.then(async () => {
+			.then(async (response) => {
+				console.log(response)
+				await addNotificationFunc(response.user, `${user.username}  removed access from your my team`)
 				const data = await getAccessRequests(user.id);
 				return res.status(200).send({
 					code: res.statusCode,
