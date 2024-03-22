@@ -14,7 +14,7 @@ const changeAccessRequestStatus = async (req, res, next) => {
 			.exec()
 			.then(async (response) => {
 				console.log('Updated response:', response);
-				req.body.status && await addNotificationFunc(response.user, `${user.username}  ${req.body.status.toLowerCase()} your my team access request`)
+				req.body.status && await addNotificationFunc(response.user._id, `${user.username}  ${req.body.status.toLowerCase()} your my team access request`)
 				const data = await getAccessRequests(user.id);
 				return res.status(200).send({
 					code: res.statusCode,

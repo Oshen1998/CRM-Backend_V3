@@ -16,7 +16,7 @@ const removeMyTeamAccessRequestByAgentOrSupervisor = async (req, res, next) => {
 		)
 			.then(async (response) => {
 				console.log(response)
-				await addNotificationFunc(response.user, `${user.username}  removed access from your my team`)
+				await addNotificationFunc(response.user._id, `${user.username}  removed access from your my team`)
 				const data = await getAccessRequests(user.id);
 				return res.status(200).send({
 					code: res.statusCode,

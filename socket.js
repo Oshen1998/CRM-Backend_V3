@@ -17,9 +17,9 @@ function init(server) {
 	});
 }
 
-function emitMessage(message) {
+function emitMessage(userId) {
 	if (io) {
-		io.emit('notification', message);
+		io.emit(`notification-user-${userId}`, "Emit notification");
 	} else {
 		console.error('Socket.io is not initialized');
 	}

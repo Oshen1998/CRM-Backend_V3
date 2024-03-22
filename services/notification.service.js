@@ -8,7 +8,7 @@ const addNotificationFunc = async (user, content) => {
 			content
 		})
 			.then((response) => {
-                emitMessage("hello" + Math.random())
+                emitMessage(user)
 				return response;
 			})
 			.catch((error) => {
