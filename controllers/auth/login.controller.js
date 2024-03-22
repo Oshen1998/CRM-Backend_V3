@@ -19,7 +19,7 @@ const loginController = async (req, res) => {
 			{
 				user: {
 					id: user._id,
-					username: `${user.firstName}_${user.lastName}`,
+					username: `${user.firstName} ${user.lastName}`,
 					email: email,
 					role: user.role
 				}
