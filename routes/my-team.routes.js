@@ -5,14 +5,15 @@ const getMyAgentsController = require('../controllers/account-setting/my-team/ge
 const removeAccessFromMyTeam = require('../controllers/account-setting/my-team/remove-access-from-myteam.controller');
 const fetchAccessRequests = require('../controllers/account-setting/my-team/fetch-acces-requests.controller');
 const changeAccessRequestStatus = require('../controllers/account-setting/my-team/change-access-request-status.controller');
+const authenticateJWT = require('../middlewares/auth/authenticate-jwt');
 
 const myTeamRouter = Router();
 
-myTeamRouter.post('/send-access-request', sendAccessRequest);
-myTeamRouter.get('/get-my-supervisors/:user', getMySupervisorsController);
-myTeamRouter.get('/fetch-access-request/:user', fetchAccessRequests);
-myTeamRouter.get('/get-my-agents/:user', getMyAgentsController);
-myTeamRouter.put('/remove-access-request/:user', removeAccessFromMyTeam);
-myTeamRouter.put('/change-access-request-status/:user/:id', changeAccessRequestStatus);
+myTeamRouter.post('/send-access-request', authenticateJWT, sendAccessRequest);
+myTeamRouter.get('/get-my-supervisors', authenticateJWT, getMySupervisorsController);
+myTeamRouter.get('/fetch-access-request', authenticateJWT, fetchAccessRequests);
+myTeamRouter.get('/get-my-agents', authenticateJWT, getMyAgentsController);
+myTeamRouter.put('/remove-access-request', authenticateJWT, removeAccessFromMyTeam);
+myTeamRouter.put('/change-access-request-status/:id', authenticateJWT, changeAccessRequestStatus);
 
 module.exports = myTeamRouter;
