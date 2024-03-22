@@ -38,7 +38,7 @@ const sendAccessRequest = async (req, res, next) => {
 				)
 					.then(async (response) => {
 						await userList.forEach(async (user) => {
-							await addNotificationFunc(user, `${currentUserDetails.firstName} ${currentUserDetails.lastName} requested my team access from you`);
+							await addNotificationFunc(user._id, `${currentUserDetails.firstName} ${currentUserDetails.lastName} requested my team access from you`);
 						})
 						res.status(200).send(response);
 					})
@@ -62,7 +62,7 @@ const sendAccessRequest = async (req, res, next) => {
 			})
 				.then(async (response) => {
 					await userList.forEach(async (user) => {
-						await addNotificationFunc(user, `${currentUserDetails.firstName} ${currentUserDetails.lastName} requested my team access from you`);
+						await addNotificationFunc(user._id, `${currentUserDetails.firstName} ${currentUserDetails.lastName} requested my team access from you`);
 					})
 					res.status(200).send(response);
 				})
