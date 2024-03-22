@@ -3,9 +3,9 @@
 const { fetchUserNotificationFunc } = require('../../services/notification.service');
 
 const fetchUserNotification = async (req, res, next) => {
-	const { user } = req.params;
+	const user = req.user;
 	try {
-		const data = await fetchUserNotificationFunc(user);
+		const data = await fetchUserNotificationFunc(user.id);
 		return res.status(200).send({
 			code: res.statusCode,
 			message: 'Fetch Notifications successfully',

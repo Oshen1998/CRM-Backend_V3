@@ -3,9 +3,8 @@ const { getAgentsListForMyTeam } = require('../../../services/myteam.service');
 
 const getMyAgentsController = async (req, res, next) => {
 	try {
-		const { user } = req.params;
-
-		const data = await getAgentsListForMyTeam(user);
+		const user = req.user;
+		const data = await getAgentsListForMyTeam(user.id);
 
 		return res.status(200).send({
 			code: res.statusCode,

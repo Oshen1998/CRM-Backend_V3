@@ -3,6 +3,7 @@ const MyTeamModel = require('../../../models/my-team.model');
 const { getAccessRequests } = require('../../../services/myteam.service');
 
 const changeAccessRequestStatus = async (req, res, next) => {
+	const user = req.user;
 	try {
 		MyTeamModel.findOneAndUpdate(
 			{ 'team._id': req.params.id },
@@ -12,7 +13,7 @@ const changeAccessRequestStatus = async (req, res, next) => {
 			.exec()
 			.then(async (updatedTeam) => {
 				console.log('Updated team:', updatedTeam);
-				const data = await getAccessRequests(req.params.user);
+				const data = await getAccessRequests(user.id);
 				return res.status(200).send({
 					code: res.statusCode,
 					message: data ? 'Updated status successful' : 'Updated status unsuccessful',

@@ -3,9 +3,9 @@ const { getSupervisorsListForMyTeam } = require('../../../services/myteam.servic
 
 const getMySupervisorsController = async (req, res, next) => {
 	try {
-		const { user } = req.params;
+		const user = req.user;
 
-		const data = await getSupervisorsListForMyTeam(user);
+		const data = await getSupervisorsListForMyTeam(user.id);
 		return res.status(200).send({
 			code: res.statusCode,
 			message: data.length ? 'Supervisors found' : 'No Supervisors found',

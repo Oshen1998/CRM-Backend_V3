@@ -2,8 +2,9 @@
 const { getAccessRequests } = require('../../../services/myteam.service');
 
 const fetchAccessRequests = async (req, res, next) => {
+	const user = req.user;
 	try {
-		const data = await getAccessRequests(req.params.user);
+		const data = await getAccessRequests(user.id);
 		return res.status(200).send({
 			code: res.statusCode,
 			message: data ? 'Access Requests Found' : 'Access Requests Not Found',

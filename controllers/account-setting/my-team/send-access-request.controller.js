@@ -4,11 +4,12 @@ const MyTeam = require('../../../models/my-team.model');
 const { addNotificationFunc } = require('../../../services/notification.service');
 const sendAccessRequest = async (req, res, next) => {
 	try {
-		const { user, emailList } = req.body;
+		const { emailList } = req.body;
+		const user = req.user;
 
-		const currentUserDetails = await UserModel.findById(user);
+		const currentUserDetails = await UserModel.findById(user.id);
 
-		const myTeam = await MyTeam.findOne({ user }).populate({
+		const myTeam = await MyTeam.findOne({ user: user.id }).populate({
 			path: 'team.user',
 			select: 'email'
 		});
@@ -21,7 +22,7 @@ const sendAccessRequest = async (req, res, next) => {
 			} else {
 				filteredEmailList = emailList;
 			}
-			console.log('filteredEmailList', filteredEmailList);
+
 			const userList = await UserModel.find({ email: { $in: filteredEmailList } });
 
 			const refactorTeamObj = userList.map((user) => ({
@@ -31,7 +32,7 @@ const sendAccessRequest = async (req, res, next) => {
 
 			if (refactorTeamObj.length) {
 				MyTeam.findOneAndUpdate(
-					{ user },
+					{ user: user.id },
 					{ $push: { team: { $each: refactorTeamObj } } },
 					{ new: true }
 				)
@@ -56,17 +57,18 @@ const sendAccessRequest = async (req, res, next) => {
 			}));
 
 			await MyTeam.create({
-				user,
+				user: userList.id,
 				team: refactorTeamObj
 			})
-				.then((response) => {
+				.then(async (response) => {
+					await userList.forEach(async (user) => {
+						await addNotificationFunc(user, `${currentUserDetails.firstName} ${currentUserDetails.lastName} requested my team access from you`);
+					})
 					res.status(200).send(response);
 				})
 				.catch((error) => {
 					res.status(400).send({ error: error.message });
 				});
-
-			//Remain send notification to agent newly added
 		}
 	} catch (error) {
 		console.error(error.message);

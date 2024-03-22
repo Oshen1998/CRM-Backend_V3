@@ -6,12 +6,11 @@ const { addNotificationFunc } = require('../../../services/notification.service'
 
 const removeAccessFromMyTeam = async (req, res, next) => {
 	try {
-		console.log('Removing')
-		const { user } = req.params;
+		const user = req.user;
 		const { disconnectUserId } = req.body;
-		const currentUserDetails = await UserModel.findById(user);
+		const currentUserDetails = await UserModel.findById(user.id);
 
-		const myTeam = await MyTeamModel.findOne({ user }).populate({
+		const myTeam = await MyTeamModel.findOne({ user: user.id }).populate({
 			path: 'team.user',
 			select: 'email'
 		});
@@ -20,13 +19,13 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 			const filteredUserList = myTeam.team.filter(
 				(item) => !item.user._id.equals(disconnectUserId)
 			);
-			MyTeamModel.findOneAndUpdate({ user }, { team: filteredUserList }, { new: true })
+			MyTeamModel.findOneAndUpdate({ user: user.id }, { team: filteredUserList }, { new: true })
 				.then(async (response) => {
 
 					await addNotificationFunc(disconnectUserId, `${currentUserDetails.firstName} ${currentUserDetails.lastName} removed my team access from you`);
 
-					const supervisorList = await getSupervisorsListForMyTeam(user);
-					const agentList = await getAgentsListForMyTeam(user);
+					const supervisorList = await getSupervisorsListForMyTeam(user.id);
+					const agentList = await getAgentsListForMyTeam(user.id);
 				
 					res.status(200).send({
 						code: res.statusCode,
