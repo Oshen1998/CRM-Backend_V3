@@ -3,7 +3,7 @@ const MyTeamModel = require('../../../models/my-team.model');
 const { getAccessRequests } = require('../../../services/myteam.service');
 
 //Remaining to implement
-const removeMyTeamAccessRequestByAgent = async (req, res, next) => {
+const removeMyTeamAccessRequestByAgentOrSupervisor = async (req, res, next) => {
 	try {
 		const { documentId, requestId } = req.body;
 		const user = req.user;
@@ -34,5 +34,5 @@ const removeMyTeamAccessRequestByAgent = async (req, res, next) => {
 	}
 };
 
-module.exports = removeMyTeamAccessRequestByAgent;
+module.exports = removeMyTeamAccessRequestByAgentOrSupervisor;
 
