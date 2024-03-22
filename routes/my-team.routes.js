@@ -6,7 +6,6 @@ const removeAccessFromMyTeam = require('../controllers/account-setting/my-team/r
 const fetchAccessRequests = require('../controllers/account-setting/my-team/fetch-acces-requests.controller');
 const changeAccessRequestStatus = require('../controllers/account-setting/my-team/change-access-request-status.controller');
 
-
 const myTeamRouter = Router();
 
 myTeamRouter.post('/send-access-request', sendAccessRequest);

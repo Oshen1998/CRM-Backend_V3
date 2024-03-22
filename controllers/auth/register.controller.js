@@ -11,9 +11,12 @@ const registerController = async (req, res, next) => {
         if (existingUser) {
             return res.status(400).json({ message: 'Username or email already exists' });
         }
+        
+		// Number of rounds hash function will execute
+		const salt = await bcrypt.genSalt(10);
 
         // Hash the password before saving
-        const hashedPassword = await bcrypt.hash(password, 10);
+		const hashedPassword = await bcrypt.hashSync(password, salt);
 
         // Create a new user
         const newUser = new UserModel({
