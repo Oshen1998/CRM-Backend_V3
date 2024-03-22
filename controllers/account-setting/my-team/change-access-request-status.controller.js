@@ -1,6 +1,7 @@
 'use strict';
 const MyTeamModel = require('../../../models/my-team.model');
 const { getAccessRequests } = require('../../../services/myteam.service');
+const { addNotificationFunc } = require('../../../services/notification.service');
 
 const changeAccessRequestStatus = async (req, res, next) => {
 	const user = req.user;
@@ -11,8 +12,9 @@ const changeAccessRequestStatus = async (req, res, next) => {
 			{ new: true } // Option to return the updated document
 		)
 			.exec()
-			.then(async (updatedTeam) => {
-				console.log('Updated team:', updatedTeam);
+			.then(async (response) => {
+				console.log('Updated response:', response);
+				req.body.status && await addNotificationFunc(response.user, `${user.username}  ${req.body.status.toLowerCase()} your my team access request`)
 				const data = await getAccessRequests(user.id);
 				return res.status(200).send({
 					code: res.statusCode,
