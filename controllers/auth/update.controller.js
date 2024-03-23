@@ -1,6 +1,6 @@
 'use strict';
-
 const UserModel = require('../../models/user.model');
+const { fetchUserDetailsFunc } = require('../../services/auth.service');
 
 const updateController = async (req, res, next) => {
 	const updateData = req.body;
@@ -25,11 +25,12 @@ const updateController = async (req, res, next) => {
 		}
 
 		// Save the updated user document
-		const updatedUser = await userResponse.save();
+		await userResponse.save();
+		const data = await fetchUserDetailsFunc(user.id);
 		return res.status(200).send({
 			code: res.statusCode,
 			message: 'Updated User successfully',
-			user: updatedUser
+			user: data
 		});
 	} catch (error) {
 		console.error(error.message);

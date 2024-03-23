@@ -13,7 +13,7 @@ const userSchema = new Schema(
 		alerts: {
 			newLeadComesIn: { type: Boolean, required: true, default: false },
 			newTextMessage: { type: Boolean, required: true, default: false },
-			missCall: { type: Boolean, required: true, default: false },
+			missedCall: { type: Boolean, required: true, default: false },
 			leadOpensEmail: { type: Boolean, required: true, default: false },
 			callRecording: { type: Boolean, required: true, default: false }
 		},
