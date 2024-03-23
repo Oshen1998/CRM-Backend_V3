@@ -22,7 +22,6 @@ const userSchema = new Schema(
 				type: String,
 				enum: ['DEFAULT_TIME', 'CUSTOM_TIME'],
 				required: false,
-				default: 'DEFAULT_TIME'
 			},
 			timeSlots: {
 				monday: { type: String, required: false },
