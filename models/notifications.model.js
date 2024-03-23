@@ -10,7 +10,8 @@ const NotificationsSchema = new Schema(
 		read: {
 			type: Boolean,
 			default: false
-		}
+		},
+		deletedAt: { type: Date, required: false, default: null },
 	},
 	{ timestamps: true }
 );
