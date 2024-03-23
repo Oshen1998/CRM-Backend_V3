@@ -17,7 +17,8 @@ const MyTeamSchema = new Schema(
 					required: true
 				}
 			}
-		]
+		],
+		deletedAt: { type: Date, required: false, default: null },
 	},
 	{ timestamps: true }
 );
