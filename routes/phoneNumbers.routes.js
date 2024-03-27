@@ -6,14 +6,17 @@ const getTollFreeNumbers = require('../controllers/phone-numbers/getTollFreeNumb
 const getPhoneNumberSid = require('../controllers/phone-numbers/getPhoneNumberSid.controller');
 const removePhoneNumber = require('../controllers/phone-numbers/removePhoneNumber.controller');
 const purchaseSelectedNumber = require('../controllers/phone-numbers/purchaseSelectedNumber.controller');
+const authenticateJWT = require('../middlewares/auth/authenticate-jwt');
+const fetchPurchasedPhoneNumbers = require('../controllers/phone-numbers/fetchPurchasedPhoneNumbers');
 
 
 const phoneNumbersRouter = Router();
 
-phoneNumbersRouter.get('/local', getLocalNumbers);
+phoneNumbersRouter.get('/fetch-purchased-numbers', authenticateJWT, fetchPurchasedPhoneNumbers);
+phoneNumbersRouter.post('/local', getLocalNumbers);
 phoneNumbersRouter.get('/toll-free', getTollFreeNumbers);
 phoneNumbersRouter.get('/:phoneNumber', getPhoneNumberSid);
-phoneNumbersRouter.delete('/:sid', removePhoneNumber);
-phoneNumbersRouter.post('/purchase', purchaseSelectedNumber);
+phoneNumbersRouter.delete('/:phoneNumber', authenticateJWT, removePhoneNumber);
+phoneNumbersRouter.post('/purchase', authenticateJWT, purchaseSelectedNumber);
 
 module.exports = phoneNumbersRouter;

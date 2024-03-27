@@ -1,42 +1,40 @@
 'use strict';
 const { env } = require('process');
+const { addPurchasePhoneNumberFunc } = require('../../services/purchase-phone-number.service');
+const { purchasePhoneNumberFuncTwilio } = require('../../services/twilio.service');
 
 const purchaseSelectedPhoneNumber = async (req, res, next) => {
-	try {    
-    const { phoneNumber } = req.body;
+	try {
+		const { phoneNumber, state } = req.body;
+		const user = req.user;
 
-    //Create a Twilio client
-    const client = require('twilio')(
-      env.TWILIO_ACCOUNT_SID,
-      env.TWILIO_AUTH_TOKEN
-    );
-   
-    //Purchase selected phone number
-    client.incomingPhoneNumbers.create({
-        phoneNumber,
-    })
-    .then((number) => {
-        return res.status(200).send({
-            code: res.statusCode,
-            message: 'Phone number purchased successfully',
-            number,
-        });
-        }
-    ).catch((error) => {
-        return res.status(400).send({
-            code: res.statusCode,
-            error: { message: error.message },
-        });
-    }
-    );
+		if (user && phoneNumber && state) {
+			const phoneNumberDetails = await purchasePhoneNumberFuncTwilio(phoneNumber);
 
-
+			const response = await addPurchasePhoneNumberFunc(
+				user.id,
+				phoneNumberDetails.phoneNumber,
+				phoneNumberDetails.sid,
+				state
+			);
+			return res.status(200).send({
+				code: res.statusCode,
+				message: 'Phone number purchased successfully',
+				phoneNumberDetails: response
+			});
+		} else {
+			return res.status(500).send({
+				code: 500,
+				error: { message: 'Something went wrong' }
+			});
+		}
 	} catch (error) {
-    return res.status(500).send({
-      code: 500,
-      error: { message: 'An internal server error occurred' },
-    });
+		return res.status(500).send({
+			code: 500,
+			error: { message: error.message }
+		});
 	}
 };
 
 module.exports = purchaseSelectedPhoneNumber;
+
