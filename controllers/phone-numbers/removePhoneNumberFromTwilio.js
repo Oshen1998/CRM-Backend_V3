@@ -1,14 +1,14 @@
 'use strict';
 const { env } = require('process');
-const { deletePurchasedPhoneNumbersFunc } = require('../../services/purchase-phone-number.service');
+const { deletePurchasedPhoneNumbersFromDbFunc } = require('../../services/purchase-phone-number.service');
 const { deletePhoneNumberFuncTwilio } = require('../../services/twilio.service');
 
-const removePhoneNumber = async (req, res, next) => {
+const removePhoneNumberFromTwilio = async (req, res, next) => {
 	try {
 		const { phoneNumber } = req.params;
 
-		// await deletePhoneNumberFuncTwilio(phoneNumber);
-		const responseUpdated = await deletePurchasedPhoneNumbersFunc(phoneNumber)
+		await deletePhoneNumberFuncTwilio(phoneNumber);
+		const responseUpdated = await deletePurchasedPhoneNumbersFromDbFunc(phoneNumber);
 		return res.status(200).send({
 			code: res.statusCode,
 			message: 'Phone number removed successfully',
@@ -23,5 +23,5 @@ const removePhoneNumber = async (req, res, next) => {
 	}
 };
 
-module.exports = removePhoneNumber;
+module.exports = removePhoneNumberFromTwilio;
 
