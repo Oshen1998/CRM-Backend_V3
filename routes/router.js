@@ -6,6 +6,7 @@ const profileRouter = require('./profile.routes');
 const phoneNumbersRouter = require('./phoneNumbers.routes');
 const myTeamRouter = require('./my-team.routes');
 const notificationRouter = require('./notifications-routes');
+const calendarRouter = require('./calendar.routes');
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.use('/profile', profileRouter);
 router.use('/my-team', myTeamRouter);
 router.use('/phone-numbers', phoneNumbersRouter);
 router.use('/notifications', notificationRouter);
+router.use('/calendars', calendarRouter);
 
 router.get('/', indexController);
 

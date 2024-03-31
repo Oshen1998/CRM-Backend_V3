@@ -10,6 +10,7 @@ const userSchema = new Schema(
 		role: { type: String, enum: ['CRM_ADMIN', 'CRM_USER'], default: 'CRM_USER' },
 		timezone: { type: String, required: false },
 		phoneNumber: { type: String, required: false },
+		googleRefreshToken: { type: String, required: false},
 		alerts: {
 			newLeadComesIn: { type: Boolean, required: true, default: false },
 			newTextMessage: { type: Boolean, required: true, default: false },
