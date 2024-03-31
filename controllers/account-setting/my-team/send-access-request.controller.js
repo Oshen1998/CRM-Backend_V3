@@ -14,7 +14,7 @@ const sendAccessRequest = async (req, res, next) => {
 			select: 'email'
 		});
 
-		if (myTeam) {
+		if (myTeam !== null) {
 			const existingEmails = myTeam.team.map((member) => member.user.email);
 			let filteredEmailList = [];
 			if (existingEmails.length > 0) {
@@ -50,14 +50,14 @@ const sendAccessRequest = async (req, res, next) => {
 			}
 		} else {
 			const userList = await UserModel.find({ email: { $in: emailList } });
-
-			const refactorTeamObj = userList.map((user) => ({
-				user: user,
+			const refactorTeamObj = await userList.map((userItem) => ({
+				user: userItem,
 				status: 'PENDING'
 			}));
-
+			console.log("refactorTeamObj", refactorTeamObj)
+			
 			await MyTeam.create({
-				user: userList.id,
+				user: user.id,
 				team: refactorTeamObj
 			})
 				.then(async (response) => {
@@ -67,6 +67,7 @@ const sendAccessRequest = async (req, res, next) => {
 					res.status(200).send(response);
 				})
 				.catch((error) => {
+					console.error(error)
 					res.status(400).send({ error: error.message });
 				});
 		}
