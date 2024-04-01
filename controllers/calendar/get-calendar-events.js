@@ -4,11 +4,11 @@ const { getCalendarEventsFunc } = require('../../services/google-api.service');
 
 const getCalendarEvents = async (req, res, next) => {
 	const user = req.user;
+	const {selectedDate} = req.body;
 	try {
 		const userResponse = await UserModel.findById(user.id);
-		console.log(userResponse)
 		if (userResponse.googleRefreshToken) {
-			const data = await getCalendarEventsFunc(userResponse.googleRefreshToken);
+			const data = await getCalendarEventsFunc(userResponse.googleRefreshToken, selectedDate);
 			return res.status(200).send({
 				code: res.statusCode,
 				message: 'Fetch Calendar events successfully',

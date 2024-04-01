@@ -27,14 +27,14 @@ const generateTokenFunc = async (code) => {
 	}
 };
 
-const getCalendarEventsFunc = async (refresh_token) => { 
+const getCalendarEventsFunc = async (refresh_token, selectedDate) => { 
 	oauth2Client.setCredentials({
 		refresh_token
 	});
-    
+    console.log(new Date(selectedDate).toISOString())
     const calendarEvents = await google.calendar({ version: "v3", auth: oauth2Client }).events.list({
 		calendarId: 'primary',
-		timeMin: new Date().toISOString(),
+		timeMin: new Date(selectedDate).toISOString(),
 		// maxResults: 20,
 		singleEvents: true,
 		orderBy: 'startTime',
