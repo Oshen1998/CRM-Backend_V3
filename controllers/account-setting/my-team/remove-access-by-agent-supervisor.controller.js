@@ -8,7 +8,15 @@ const removeMyTeamAccessRequestByAgentOrSupervisor = async (req, res, next) => {
 	try {
 		const { documentId, requestId } = req.body;
 		const user = req.user;
-		
+
+		if (user.role !== 'CRM_ADMIN' && user.role !== 'CRM_SUPERVISOR') {
+			return res.status(403).send({
+				code: 403,
+				message: 'Unauthorized: Only users with role CRM_ADMIN or CRM_SUPERVISOR can remove access requests'
+			});
+		}
+
+
 		MyTeamModel.findOneAndUpdate(
 			{ _id: documentId },
 			{ $pull: { team: { user: user.id, _id: requestId } } },

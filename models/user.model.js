@@ -7,10 +7,14 @@ const userSchema = new Schema(
 		password: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
 		profileImage: { type: String, required: false, default: null },
-		role: { type: String, enum: ['CRM_ADMIN', 'CRM_USER'], default: 'CRM_USER' },
+		role: {
+			type: String,
+			enum: ['CRM_ADMIN', 'CRM_COMPANY_ADMIN', 'CRM_COMPANY_USER', 'CRM_COMPANY_SUPERVISOR', 'CRM_USER', 'CRM_SUPERVISOR'],
+			default: 'CRM_USER'
+		},
 		timezone: { type: String, required: false },
 		phoneNumber: { type: String, required: false },
-		googleRefreshToken: { type: String, required: false},
+		googleRefreshToken: { type: String, required: false },
 		alerts: {
 			newLeadComesIn: { type: Boolean, required: true, default: false },
 			newTextMessage: { type: Boolean, required: true, default: false },
@@ -39,6 +43,6 @@ const userSchema = new Schema(
 	{ timestamps: true }
 );
 
-const UserModel = model('user', userSchema);
+const UserModel = model('User', userSchema);
 
 module.exports = UserModel;
