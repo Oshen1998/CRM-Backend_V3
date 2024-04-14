@@ -1,6 +1,7 @@
 'use strict';
 const { env } = require('process');
 const { google } = require('googleapis');
+const moment = require('moment');
 
 const googleClientId =
 	process.env.GOOGLE_CLIENT_ID ||
@@ -34,9 +35,13 @@ const getCalendarEventsFunc = async (refresh_token, selectedDate) => {
 	oauth2Client.setCredentials({
 		refresh_token
 	});
+	const startDate = moment(selectedDate).subtract(60, 'days').startOf('day').toISOString();
+	const endDate = moment(selectedDate).add(60, 'days').endOf('day').toISOString();
+
 	const calendarEvents = await google.calendar({ version: 'v3', auth: oauth2Client }).events.list({
 		calendarId: 'primary',
-		timeMin: new Date(selectedDate).toISOString(),
+		timeMin: startDate,
+		timeMax: endDate,
 		// maxResults: 20,
 		singleEvents: true,
 		orderBy: 'startTime'
@@ -46,7 +51,7 @@ const getCalendarEventsFunc = async (refresh_token, selectedDate) => {
 };
 
 const createCalendarEventsFunc = async (refresh_token, eventDetails) => {
-	const {title, description, startDateTime, endDateTime} = eventDetails;
+	const { title, description, startDateTime, endDateTime } = eventDetails;
 	oauth2Client.setCredentials({
 		refresh_token
 	});
@@ -73,7 +78,7 @@ const createCalendarEventsFunc = async (refresh_token, eventDetails) => {
 			]
 		}
 	};
-	console.log(event)
+	console.log(event);
 	google.calendar({ version: 'v3', auth: oauth2Client }).events.insert(
 		{
 			calendarId: 'primary',
@@ -90,7 +95,6 @@ const createCalendarEventsFunc = async (refresh_token, eventDetails) => {
 };
 
 const deleteCalendarEventFunc = async (refresh_token, eventId) => {
-
 	oauth2Client.setCredentials({
 		refresh_token
 	});

@@ -2,9 +2,12 @@ const UserModel = require('../models/user.model');
 
 const fetchUserDetailsFunc = async (userId) => {
 	try {
-		return await UserModel.findById(userId).select("-password").select("-googleRefreshToken")
+		return await UserModel.findById(userId).select("-password")
 			.then((response) => {
-				return response;
+				console.log(response)
+				const user = response;
+				user.googleRefreshToken = response.googleRefreshToken ? true : false
+				return user;
 			})
 			.catch((error) => {
 				throw new Error(error);
