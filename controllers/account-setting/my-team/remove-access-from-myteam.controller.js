@@ -9,14 +9,7 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 		const user = req.user;
 		const { disconnectUserId } = req.body;
 		const currentUserDetails = await UserModel.findById(user.id);
-
-		if (user.role !== 'CRM_ADMIN' && user.role !== 'CRM_SUPERVISOR') {
-			return res.status(403).send({
-				code: 403,
-				message: 'Unauthorized: Only users with role CRM_ADMIN or CRM_SUPERVISOR can remove access from my team'
-			});
-		}
-
+		
 		const myTeam = await MyTeamModel.findOne({ user: user.id }).populate({
 			path: 'team.user',
 			select: 'email'

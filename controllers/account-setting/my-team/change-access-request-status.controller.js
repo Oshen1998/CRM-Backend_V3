@@ -7,13 +7,6 @@ const changeAccessRequestStatus = async (req, res, next) => {
 	const user = req.user;
 
 	try {
-		// Check if the user has the required role
-		if (user.role !== 'CRM_ADMIN') {
-			return res.status(403).send({
-				code: 403,
-				message: 'Unauthorized: Only users with role CRM_ADMIN can change access request status'
-			});
-		}
 
 		MyTeamModel.findOneAndUpdate(
 			{ 'team._id': req.params.id },

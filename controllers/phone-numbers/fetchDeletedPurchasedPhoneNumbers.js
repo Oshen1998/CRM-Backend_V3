@@ -5,13 +5,7 @@ const { fetchDeletedPurchasedPhoneNumbersFunc } = require("../../services/purcha
 const fetchDeletedPurchasedPhoneNumbers = async (req, res, next) => {
     const user = req.user;
 	try {
-		if (user.role !== 'CRM__ADMIN' && user.role !== 'CRM_MANAGER') {
-            return res.status(403).send({
-                code: 403,
-                message: 'Unauthorized: Insufficient permissions to access deleted purchased phone numbers'
-            });
-        }
-
+		
 		const deletedPurchasedPhoneNumberList = await fetchDeletedPurchasedPhoneNumbersFunc(user.id);
 		return res.status(200).send({
 			code: res.statusCode,

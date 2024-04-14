@@ -6,13 +6,7 @@ const { deletePhoneNumberFuncTwilio } = require('../../services/twilio.service')
 const removePhoneNumber = async (req, res, next) => {
 	try {
 		const { phoneNumber } = req.params;
-		const user = req.user;
-		if (user.role !== 'CRM_ADMIN' && user.role !== 'CRM_COMPANY_ADMIN' && user.role !== 'CRM_MANAGER') {
-			return res.status(403).send({
-				code: 403,
-				message: 'Unauthorized: Insufficient permissions'
-			});
-		}
+		
 		// await deletePhoneNumberFuncTwilio(phoneNumber);
 		const responseUpdated = await deletePurchasedPhoneNumbersFunc(phoneNumber)
 		return res.status(200).send({
