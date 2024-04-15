@@ -3,7 +3,7 @@
 const { fetchPurchasedPhoneNumbersFunc } = require("../../services/purchase-phone-number.service");
 
 const fetchPurchasedPhoneNumbers = async (req, res, next) => {
-    const user = req.user;
+	const user = req.user;
 	try {
 		const purchasedPhoneNumberList = await fetchPurchasedPhoneNumbersFunc(user.id);
 		//Retrieve local phone numbers

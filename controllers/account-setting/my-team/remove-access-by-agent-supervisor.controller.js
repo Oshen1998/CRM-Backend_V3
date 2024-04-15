@@ -8,7 +8,7 @@ const removeMyTeamAccessRequestByAgentOrSupervisor = async (req, res, next) => {
 	try {
 		const { documentId, requestId } = req.body;
 		const user = req.user;
-		
+
 		MyTeamModel.findOneAndUpdate(
 			{ _id: documentId },
 			{ $pull: { team: { user: user.id, _id: requestId } } },

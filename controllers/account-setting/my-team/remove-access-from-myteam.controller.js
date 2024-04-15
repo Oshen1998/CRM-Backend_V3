@@ -9,7 +9,7 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 		const user = req.user;
 		const { disconnectUserId } = req.body;
 		const currentUserDetails = await UserModel.findById(user.id);
-
+		
 		const myTeam = await MyTeamModel.findOne({ user: user.id }).populate({
 			path: 'team.user',
 			select: 'email'
@@ -26,7 +26,7 @@ const removeAccessFromMyTeam = async (req, res, next) => {
 
 					const supervisorList = await getSupervisorsListForMyTeam(user.id);
 					const agentList = await getAgentsListForMyTeam(user.id);
-				
+
 					res.status(200).send({
 						code: res.statusCode,
 						message: response,
