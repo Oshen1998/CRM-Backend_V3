@@ -1,18 +1,19 @@
 'use strict';
 
 const tagModel = require('../../models/tags.model');
+
 const addTagController = async (req, res, next) => {
 	try {
 		let { name, colorHex } = req.body;
 		const { id } = req.params;
 
-		// Check tag existence
+		//check tag existence
 		let tagExist = await tagModel.findOne({ name });
 
 		if (tagExist) {
 			return res.status(409).send({
 				code: res.statusCode,
-				message: 'Tag already exists'
+				message: 'tag already exists'
 			});
 		}
 
@@ -22,13 +23,12 @@ const addTagController = async (req, res, next) => {
 			addedBy: id
 		});
 
-		if (tag) {
+		if (tag)
 			return res.status(201).send({
 				code: res.statusCode,
-				message: 'Tag created successfully',
+				message: 'tag created successfully',
 				tag
 			});
-		}
 	} catch (error) {
 		return res.status(500).send({
 			code: 500,
