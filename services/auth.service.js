@@ -6,8 +6,14 @@ const fetchUserDetailsFunc = async (userId) => {
 			.then((response) => {
 				console.log(response)
 				const user = response;
-				user.googleRefreshToken = response.googleRefreshToken ? true : false
-				return user;
+
+				const userResponse = {
+					...user._doc,
+					googleAccountExist : response.googleRefreshToken ? true : false
+				}
+
+				delete userResponse.googleRefreshToken;
+				return userResponse;
 			})
 			.catch((error) => {
 				throw new Error(error);
