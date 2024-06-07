@@ -2,8 +2,11 @@
 const { env } = require('process');
 const { google } = require('googleapis');
 
-const googleClientId = process.env.GOOGLE_CLIENT_ID || "21936870861-mf5qdjouvkkpn2fnh0nj5vemm5jp2rl4.apps.googleusercontent.com";
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET || "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";
+const googleClientId =
+	process.env.GOOGLE_CLIENT_ID ||
+	'21936870861-mf5qdjouvkkpn2fnh0nj5vemm5jp2rl4.apps.googleusercontent.com';
+const googleClientSecret =
+	process.env.GOOGLE_CLIENT_SECRET || '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';
 
 const oauth2Client = new google.auth.OAuth2(
 	googleClientId,
@@ -12,7 +15,7 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 const generateTokenFunc = async (code) => {
-	console.log({code, googleClientId, googleClientSecret})
+	console.log({ code, googleClientId, googleClientSecret });
 	try {
 		const oauth2Client = new google.auth.OAuth2(
 			googleClientId,
@@ -27,23 +30,23 @@ const generateTokenFunc = async (code) => {
 	}
 };
 
-const getCalendarEventsFunc = async (refresh_token) => { 
+const getCalendarEventsFunc = async (refresh_token) => {
 	oauth2Client.setCredentials({
 		refresh_token
 	});
-    
-    const calendarEvents = await google.calendar({ version: "v3", auth: oauth2Client }).events.list({
+
+	const calendarEvents = await google.calendar({ version: 'v3', auth: oauth2Client }).events.list({
 		calendarId: 'primary',
 		timeMin: new Date().toISOString(),
 		// maxResults: 20,
 		singleEvents: true,
-		orderBy: 'startTime',
-	  });
-	console.log(calendarEvents.data.items)
-    return calendarEvents.data.items
+		orderBy: 'startTime'
+	});
+	console.log(calendarEvents.data.items);
+	return calendarEvents.data.items;
 };
 
 module.exports = {
-    getCalendarEventsFunc,
-    generateTokenFunc
+	getCalendarEventsFunc,
+	generateTokenFunc
 };

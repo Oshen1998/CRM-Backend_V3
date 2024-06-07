@@ -2,7 +2,9 @@ const UserModel = require('../models/user.model');
 
 const fetchUserDetailsFunc = async (userId) => {
 	try {
-		return await UserModel.findById(userId).select("-password").select("-googleRefreshToken")
+		return await UserModel.findById(userId)
+			.select('-password')
+			.select('-googleRefreshToken')
 			.then((response) => {
 				return response;
 			})
@@ -15,15 +17,18 @@ const fetchUserDetailsFunc = async (userId) => {
 };
 
 const saveRefreshTokenFunc = async (userId, googleRefreshToken) => {
-	UserModel.updateMany({ _id: userId }, { $set: { googleRefreshToken: googleRefreshToken } }, { multi: true })
-	.exec()
-	.then(() => {
-		return "Refresh token updated successfully"
-	})
-	.catch((error) => {
-		throw new Error(error);
-	});
-}
+	UserModel.updateMany(
+		{ _id: userId },
+		{ $set: { googleRefreshToken: googleRefreshToken } },
+		{ multi: true }
+	)
+		.exec()
+		.then(() => {
+			return 'Refresh token updated successfully';
+		})
+		.catch((error) => {
+			throw new Error(error);
+		});
+};
 
 module.exports = { fetchUserDetailsFunc, saveRefreshTokenFunc };
-

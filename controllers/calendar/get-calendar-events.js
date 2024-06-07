@@ -6,7 +6,7 @@ const getCalendarEvents = async (req, res, next) => {
 	const user = req.user;
 	try {
 		const userResponse = await UserModel.findById(user.id);
-		console.log(userResponse)
+		console.log(userResponse);
 		if (userResponse.googleRefreshToken) {
 			const data = await getCalendarEventsFunc(userResponse.googleRefreshToken);
 			return res.status(200).send({
@@ -32,4 +32,3 @@ const getCalendarEvents = async (req, res, next) => {
 module.exports = {
 	getCalendarEvents
 };
-
