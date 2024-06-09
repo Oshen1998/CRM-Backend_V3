@@ -37,27 +37,34 @@ const appointmentSchema = new Schema({
 	},
 	availability: {
 		slots: {
-			type: Map,
-			of: new Schema({
-			  timeSlot: { type: String, required: true },
-			  available: { type: Boolean, required: true }
-			}, { _id: false })
-		  },
+			type: Object,
+			dynamic: true,
+			properties: {
+				timeSlot: {
+					type: Object,
+					dynamic: true,
+					properties: {
+						type: Boolean
+					}
+				}
+			}
+		},
 		selectedDays: {
 			type: [String],
 			required: false
 		}
 	},
 	notifications: {
+		confirmationEmailMessage: { type: String, required: false },
 		notifyVia: {
 			type: {
 				SMS: { type: Boolean, required: false, default: false },
 				Email: { type: Boolean, required: false, default: false }
 			}
 		},
-		triggerAutomatedAction: { type: Boolean, required: false, default: false },
 		sendConfirmationEmail: { type: Boolean, required: false, default: false },
-		confirmationEmailMessage: { type: String, required: false, default: false }
+		triggerAutomatedAction: { type: Boolean, required: false, default: false },
+		
 	}
 });
 

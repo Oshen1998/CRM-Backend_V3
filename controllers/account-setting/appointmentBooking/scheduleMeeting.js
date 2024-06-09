@@ -2,7 +2,6 @@
 const AppointmentModel = require('../../../models/appointment.model');
 const dynamicRouteModel = require('../../../models/dynamicRoutes.model');
 const handler = require('../../../helpers/errorHandleHelpers/index');
-const base64 = require('base64-js');
 
 const makeAnAppointmentController = async (req, res) => {
 	try {
@@ -23,8 +22,6 @@ const makeAnAppointmentController = async (req, res) => {
 		const parsedNotificationDetails = JSON.parse(notificationDetails);
 		const parsedAvailability = JSON.parse(availability);
 
-		console.log(parsedAvailability);
-
 		// Get identityId from authenticated user
 		const identityId = req.user.id;
 
@@ -42,8 +39,8 @@ const makeAnAppointmentController = async (req, res) => {
 			appointmentDetails: parsedAppointmentDetails,
 			additionalFields: parsedAdditionalFields,
 			appearanceDetails: parsedAppearanceDetails,
-			notificationDetails: parsedNotificationDetails,
 			availability: parsedAvailability,
+			notifications: parsedNotificationDetails
 		};
 
 		let responseMessage;
@@ -76,7 +73,6 @@ const makeAnAppointmentController = async (req, res) => {
 		const result = await appointmentData.save();
 		handler.successResponseHandler(res, result, responseMessage);
 	} catch (error) {
-		console.log(error);
 		handler.unprocessableEntityResponseHandler(res);
 	}
 };
