@@ -1,24 +1,22 @@
 'use strict';
 const UserModel = require('../../models/user.model');
-const { getCalendarEventsFunc } = require('../../services/google-api.service');
+const { deleteCalendarEventFunc } = require('../../services/google-api.service');
 
-const getCalendarEvents = async (req, res, next) => {
+const deleteCalendarEvent = async (req, res, next) => {
 	const user = req.user;
-	const {selectedDate} = req.body;
+	const {eventId}  = req.params;
 	try {
 		const userResponse = await UserModel.findById(user.id);
 		if (userResponse.googleRefreshToken) {
-			const data = await getCalendarEventsFunc(userResponse.googleRefreshToken, selectedDate);
+			await deleteCalendarEventFunc(userResponse.googleRefreshToken, eventId);
 			return res.status(200).send({
 				code: res.statusCode,
-				message: 'Fetch Calendar events successfully',
-				events: data
+				message: 'Delete calendar event successfully'
 			});
 		} else {
 			return res.status(400).send({
 				code: res.statusCode,
-				message: 'Not Found google account to this user',
-				events: []
+				message: 'Not Found google account to this user'
 			});
 		}
 	} catch (error) {
@@ -30,6 +28,6 @@ const getCalendarEvents = async (req, res, next) => {
 };
 
 module.exports = {
-	getCalendarEvents
+	deleteCalendarEvent
 };
 
