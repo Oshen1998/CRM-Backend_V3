@@ -6,7 +6,7 @@ const { deletePhoneNumberFuncTwilio } = require('../../services/twilio.service')
 const removePhoneNumberFromTwilio = async (req, res, next) => {
 	try {
 		const { phoneNumber } = req.params;
-
+		
 		await deletePhoneNumberFuncTwilio(phoneNumber);
 		const responseUpdated = await deletePurchasedPhoneNumbersFromDbFunc(phoneNumber);
 		return res.status(200).send({

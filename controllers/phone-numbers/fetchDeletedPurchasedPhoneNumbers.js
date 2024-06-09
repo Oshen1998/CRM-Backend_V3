@@ -5,6 +5,7 @@ const { fetchDeletedPurchasedPhoneNumbersFunc } = require("../../services/purcha
 const fetchDeletedPurchasedPhoneNumbers = async (req, res, next) => {
     const user = req.user;
 	try {
+		
 		const deletedPurchasedPhoneNumberList = await fetchDeletedPurchasedPhoneNumbersFunc(user.id);
 		return res.status(200).send({
 			code: res.statusCode,

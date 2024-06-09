@@ -10,9 +10,8 @@ const getSupervisorsListForMyTeam = async (user) => {
 		if (myTeams) {
 			const supervisorList = myTeams.team.map((item) => {
 				//Until implement user roles and status
-
 				if (item.user.role === 'user' || true) {
-					return { _id: item.user._id, firstName: item.user.firstName, lastName: item.user.lastName , email: item.user.email };
+					return { _id: item.user._id, firstName: item.user.firstName, lastName: item.user.lastName, email: item.user.email };
 				}
 			});
 			return supervisorList;

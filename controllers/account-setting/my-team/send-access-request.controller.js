@@ -6,7 +6,7 @@ const sendAccessRequest = async (req, res, next) => {
 	try {
 		const { emailList } = req.body;
 		const user = req.user;
-
+		//All users should be able to send access requests to add members to their team.
 		const currentUserDetails = await UserModel.findById(user.id);
 
 		const myTeam = await MyTeam.findOne({ user: user.id }).populate({
@@ -55,7 +55,7 @@ const sendAccessRequest = async (req, res, next) => {
 				status: 'PENDING'
 			}));
 			console.log("refactorTeamObj", refactorTeamObj)
-			
+
 			await MyTeam.create({
 				user: user.id,
 				team: refactorTeamObj

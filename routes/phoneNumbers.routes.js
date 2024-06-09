@@ -10,16 +10,17 @@ const authenticateJWT = require('../middlewares/auth/authenticate-jwt');
 const fetchPurchasedPhoneNumbers = require('../controllers/phone-numbers/fetchPurchasedPhoneNumbers');
 const fetchDeletedPurchasedPhoneNumbers = require('../controllers/phone-numbers/fetchDeletedPurchasedPhoneNumbers');
 const removePhoneNumberFromTwilio = require('../controllers/phone-numbers/removePhoneNumberFromTwilio');
+const authorizeRole = require('../middlewares/auth/authorize-role');
 
 const phoneNumbersRouter = Router();
 
-phoneNumbersRouter.get('/fetch-purchased-numbers', authenticateJWT, fetchPurchasedPhoneNumbers);
-phoneNumbersRouter.get('/fetch-deleted-purchased-numbers', authenticateJWT, fetchDeletedPurchasedPhoneNumbers);
-phoneNumbersRouter.post('/local', getLocalNumbers);
-phoneNumbersRouter.get('/toll-free', getTollFreeNumbers);
-phoneNumbersRouter.get('/:phoneNumber', getPhoneNumberSid);
-phoneNumbersRouter.delete('/:phoneNumber', authenticateJWT, removePhoneNumber);
-phoneNumbersRouter.delete('/twilio/:phoneNumber', authenticateJWT, removePhoneNumberFromTwilio);
-phoneNumbersRouter.post('/purchase', authenticateJWT, purchaseSelectedNumber);
+phoneNumbersRouter.get('/fetch-purchased-numbers', authenticateJWT,authorizeRole(['CRM_USER','CRM_ADMIN']), fetchPurchasedPhoneNumbers);
+phoneNumbersRouter.get('/fetch-deleted-purchased-numbers', authenticateJWT, authorizeRole(['CRM_USER','CRM_ADMIN']),fetchDeletedPurchasedPhoneNumbers);
+phoneNumbersRouter.post('/local', authorizeRole(['CRM_USER','CRM_ADMIN']),getLocalNumbers);
+phoneNumbersRouter.get('/toll-free', authorizeRole(['CRM_USER','CRM_ADMIN']),getTollFreeNumbers);
+phoneNumbersRouter.get('/:phoneNumber', authorizeRole(['CRM_USER','CRM_ADMIN']),getPhoneNumberSid);
+phoneNumbersRouter.delete('/:phoneNumber', authenticateJWT,authorizeRole(['CRM_USER','CRM_ADMIN']), removePhoneNumber);
+phoneNumbersRouter.delete('/twilio/:phoneNumber', authenticateJWT,authorizeRole(['CRM_USER','CRM_ADMIN']), removePhoneNumberFromTwilio);
+phoneNumbersRouter.post('/purchase', authenticateJWT,authorizeRole(['CRM_USER','CRM_ADMIN']), purchaseSelectedNumber);
 
 module.exports = phoneNumbersRouter;
