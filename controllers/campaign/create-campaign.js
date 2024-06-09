@@ -2,23 +2,23 @@
 const { createCampaignFunc } = require('../../services/campaign-service');
 
 const createCampaign = async (req, res, next) => {
-	const { name, date, time, isScheduled, isSendText, isSendEmail, message, estimatedCost } =
+	const { campaignName, date, time, isScheduled, isSendText, isSendEmail, message, email } =
 		req.body;
 	const user = req.user;
 	try {
 		const data = await createCampaignFunc(
 			user.id,
-			name,
+			campaignName,
 			date,
 			time,
 			isScheduled,
 			isSendText,
 			isSendEmail,
 			message,
-			estimatedCost
+			email
 		);
-        
-        //Need to implement cron job for send emails or sms for a specific time
+
+		//Need to implement cron job for send emails or sms for a specific time
 
 		return res.status(200).send({
 			code: res.statusCode,
