@@ -1,6 +1,6 @@
 'use strict';
 const { Router } = require('express');
-const makeAnAppointmentController = require('../controllers/account-setting/appointmentBooking/scheduleMeeting');
+const appointmentController = require('../controllers/account-setting/appointmentBooking/scheduleMeeting');
 const getBookingDetails = require('../controllers/account-setting/appointmentBooking/getScheduled');
 const uploads = require('../utils/uploader');
 const authenticateJWT = require('../middlewares/auth/authenticate-jwt');
@@ -11,9 +11,10 @@ bookingRouter.post(
 	'/appointment-details',
 	uploads.single('logo'),
 	authenticateJWT,
-	makeAnAppointmentController
+	appointmentController.makeAnAppointmentController
 );
 bookingRouter.get('/existing-path/:name', getBookingDetails.validateExistingPath);
 bookingRouter.get('/get/appointment', authenticateJWT, getBookingDetails.getScheduledMeetingData);
+bookingRouter.post('/scheduled/appointment', appointmentController.addAnEventToUserCalender);
 
 module.exports = bookingRouter;

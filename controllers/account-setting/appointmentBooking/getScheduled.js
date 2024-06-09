@@ -21,7 +21,7 @@ const getScheduledMeetingData = async (req, res) => {
 const validateExistingPath = async (req, res) => {
 	try {
 		const path = req.params;
-		const existingPath = await dynamicRouteModel.findOne({ pathName: path.name });
+		const existingPath = await dynamicRouteModel.findOne({ pathName: path?.name });
 
 		if (existingPath) {
 			const data = await AppointmentModel.findOne({ identityID: existingPath.identityID });
