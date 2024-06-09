@@ -1,3 +1,4 @@
+const moment = require('moment/moment');
 const CampaignModel = require('../models/campaign.model');
 
 const createCampaignFunc = async (
@@ -37,12 +38,18 @@ const createCampaignFunc = async (
 const fetchCampaignsByUserFunc = async (user) => {
 	try {
 		const campaigns = await CampaignModel.find({ user });
+
 		if(campaigns.length){
 			return campaigns.map((campaign) => {
+				const campaignDate = new Date(campaign.date);
+				const sendDate = `${campaignDate.getFullYear()}/${campaignDate.getMonth()}/${campaignDate.getDate()}`;
+
+				const campaignTime = new Date(campaign.time);
+				const sendTime = `${campaignTime.getHours()}:${campaignTime.getMinutes()}:${campaignTime.getSeconds()}`
 				return {
 					campaignName: campaign.campaignName,
 					type: campaign.isSendEmail &&  campaign.isSendText ? 'SMS & Email Campaign' : campaign.isSendEmail ?  'Email Campaign' :  'SMS Campaign',
-					sentAt: campaign.date ,
+					sentAt: sendDate + " " + sendTime,
 					createdAt: campaign.createdAt,
 					estimatedCost: campaign.estimatedCost,
 					email: {
