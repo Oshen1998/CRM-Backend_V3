@@ -6,6 +6,7 @@ const notFoundErrorHandler = require('./middlewares/global/notFoundErrorHandler.
 const router = require('./routes/router');
 const { env } = require('process');
 const socket = require('./socket');
+const scheduleCampaigns = require('./services/campaign-scheduler');
 
 require('./config/dotenv.config');
 require('./config/mongoose.config');
@@ -21,6 +22,9 @@ app.use(router);
 socket.init(server);
 app.use(notFoundErrorHandler);
 app.use(errorHandler);
+
+// Campaign scheduler cron job start
+// scheduleCampaigns();
 
 server.listen(PORT, () =>
 	console.log(`server is running on port : ${PORT},\n http://localhost:${PORT}`)
