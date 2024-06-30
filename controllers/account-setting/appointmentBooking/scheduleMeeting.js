@@ -4,6 +4,7 @@ const dynamicRouteModel = require('../../../models/dynamicRoutes.model');
 const usersModel = require('../../../models/user.model');
 const handler = require('../../../helpers/errorHandleHelpers/index');
 const { createCalendarEventsFunc } = require('../../../services/google-api.service');
+const uploadImageToFirestore = require('../../../utils/fireStoreUploader');
 
 const makeAnAppointmentController = async (req, res) => {
 	try {
@@ -31,7 +32,17 @@ const makeAnAppointmentController = async (req, res) => {
 		const existAppointment = await AppointmentModel.findOne({ identityID: identityId });
 		let logoUri;
 		if (req.file) {
-			logoUri = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+			const mimeType = req.file.mimetype;
+			const path = req.file.path;
+			const name = req.file.originalname;
+			uploadImageToFirestore(path, name, mimeType)
+				.then((imageUrl) => {
+					logoUri = imageUrl;
+					console.log('Image URL:', imageUrl);
+				})
+				.catch((error) => {
+					console.error('uploadImageToFirestore Error:', error);
+				});
 		}
 
 		const payload = {
@@ -63,7 +74,6 @@ const makeAnAppointmentController = async (req, res) => {
 				new: true
 			});
 			responseMessage = 'Updated Successfully!';
-			console.log(appointmentData);
 			if (appointmentData) {
 				await dynamicRouteModel.findOneAndUpdate(
 					{ identityID: identityId },
@@ -87,7 +97,7 @@ const addAnEventToUserCalender = async (req, res) => {
 	try {
 		// title, description, startDateTime, endDateTime - rest
 		const { identityID, ...rest } = req.body;
-		const {googleRefreshToken} = await usersModel.findById({ _id: identityID });
+		const { googleRefreshToken } = await usersModel.findById({ _id: identityID });
 
 		if (googleRefreshToken) {
 			const { notifications } = await AppointmentModel.findOne({ identityID: identityID });

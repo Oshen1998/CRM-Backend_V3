@@ -9,6 +9,7 @@
 		"express": "^4.18.2",
 		"file-base64": "^1.0.0",
 		"file64": "^1.0.3",
+		"firebase-admin": "^12.1.1",
 		"googleapis": "^134.0.0",
 		"http-status": "^1.7.4",
 		"joi": "^17.12.2",
